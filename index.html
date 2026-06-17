@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Diario Sonoro</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
@@ -374,60 +374,59 @@
 <body>
 
     <div id="start-overlay">
-        <div class="so-kicker">Visuales Iris</div>
         <div class="so-title">Diario Sonoro</div>
         <div class="so-play" aria-hidden="true"></div>
         <div class="so-hint">Toca la pantalla para iniciar con sonido</div>
     </div>
 
     <div id="theme-selector" class="ui-panel">
-        <div id="theme-selector-title">Visual Theme</div>
+        <div id="theme-selector-title">Tema visual</div>
         <div class="theme-grid">
-            <button class="theme-button" id="theme-1" data-theme="0" aria-label="Theme 1"></button>
-            <button class="theme-button" id="theme-2" data-theme="1" aria-label="Theme 2"></button>
-            <button class="theme-button" id="theme-3" data-theme="2" aria-label="Theme 3"></button>
-            <button class="theme-button" id="theme-4" data-theme="3" aria-label="Theme 4"></button>
+            <button class="theme-button" id="theme-1" data-theme="0" aria-label="Tema 1"></button>
+            <button class="theme-button" id="theme-2" data-theme="1" aria-label="Tema 2"></button>
+            <button class="theme-button" id="theme-3" data-theme="2" aria-label="Tema 3"></button>
+            <button class="theme-button" id="theme-4" data-theme="3" aria-label="Tema 4"></button>
         </div>
         <div id="density-controls">
-            <div class="density-label"><span>Density</span><span id="density-value">100%</span></div>
+            <div class="density-label"><span>Densidad</span><span id="density-value">100%</span></div>
             <input type="range" min="20" max="100" value="100" class="density-slider" id="density-slider"
-                aria-label="Network Density">
+                aria-label="Densidad de red">
         </div>
     </div>
 
     <div id="control-buttons">
-        <button id="mic-btn" class="control-button" title="Toggle microphone">Mic</button>
-        <button id="file-btn" class="control-button" title="Load audio file">Audio File</button>
+        <button id="mic-btn" class="control-button" title="Activar/desactivar micrófono">Micro</button>
+        <button id="file-btn" class="control-button" title="Cargar archivo de audio">Archivo</button>
         <input id="audio-file-input" type="file" accept="audio/*" style="display:none" />
-        <button id="change-formation-btn" class="control-button">Formation</button>
-        <button id="pause-play-btn" class="control-button">Pause</button>
-        <button id="reset-camera-btn" class="control-button">Reset Cam</button>
-        <button id="dome-btn" class="control-button" title="Toggle Dome Mode">Dome</button>
-        <button id="fs-btn" class="control-button" title="Fullscreen">Full</button>
+        <button id="change-formation-btn" class="control-button" title="Cambiar formación">Formación</button>
+        <button id="pause-play-btn" class="control-button">Pausa</button>
+        <button id="reset-camera-btn" class="control-button" title="Reiniciar cámara">Cámara</button>
+        <button id="dome-btn" class="control-button" title="Activar/desactivar modo domo">Domo</button>
+        <button id="fs-btn" class="control-button" title="Pantalla completa">Pantalla</button>
     </div>
 
     <!-- Sensitivity panel (added) -->
     <div class="ui-panel" id="audio-controls" style="right:20px; bottom:90px; max-width: 260px;">
-      <div style="font-weight:600; margin-bottom:8px;">Audio Sensitivity</div>
+      <div style="font-weight:600; margin-bottom:8px;">Sensibilidad de audio</div>
       <div style="display:grid; grid-template-columns:auto 60px 60px; gap:6px 8px; align-items:center;">
-        <div></div><div>Thres</div><div>Delta</div>
-        <label>Bass</label>
+        <div></div><div>Umbral</div><div>Delta</div>
+        <label>Graves</label>
         <input id="thL" type="range" min="0" max="1" step="0.01" value="0.12">
         <input id="dlL" type="range" min="0" max="0.2" step="0.005" value="0.03">
-        <label>Mid</label>
+        <label>Medios</label>
         <input id="thM" type="range" min="0" max="1" step="0.01" value="0.10">
         <input id="dlM" type="range" min="0" max="0.2" step="0.005" value="0.03">
-        <label>High</label>
+        <label>Agudos</label>
         <input id="thH" type="range" min="0" max="1" step="0.01" value="0.08">
         <input id="dlH" type="range" min="0" max="0.2" step="0.005" value="0.03">
       </div>
       <div style="margin-top:8px; display:flex; gap:8px; align-items:center;">
-        <label for="cooldown" style="min-width:70px;">Cooldown</label>
+        <label for="cooldown" style="min-width:70px;">Espera</label>
         <input id="cooldown" type="range" min="0.02" max="0.3" step="0.01" value="0.08" style="flex:1;">
       </div>
       <div style="margin-top:6px; display:flex; gap:10px; align-items:center; justify-content:space-between;">
-        <label style="display:flex; align-items:center; gap:6px;"><input id="audioOnly" type="checkbox" checked> Audio only</label>
-        <button id="resetSliders" class="control-button" style="padding:6px 10px;">Reset</button>
+        <label style="display:flex; align-items:center; gap:6px;"><input id="audioOnly" type="checkbox" checked> Solo audio</label>
+        <button id="resetSliders" class="control-button" style="padding:6px 10px;">Reiniciar</button>
       </div>
     </div>
 
@@ -1657,7 +1656,7 @@
         function onFsChange(){
             const fs = !!isFullscreen();
             document.body.classList.toggle('fs', fs);
-            fsBtn.textContent = fs ? 'Exit Full' : 'Full';
+            fsBtn.textContent = fs ? 'Salir' : 'Pantalla';
             if (fs){
                 document.body.classList.remove('show-ui');
                 scheduleHide();
@@ -1696,7 +1695,7 @@
         pausePlayBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             config.paused = !config.paused;
-            pausePlayBtn.textContent = config.paused ? 'Play' : 'Pause';
+            pausePlayBtn.textContent = config.paused ? 'Reproducir' : 'Pausa';
             controls.autoRotate = !config.paused;
         });
 
@@ -1715,7 +1714,7 @@
 
         function toggleDomeMode() {
             config.domeMode = !config.domeMode;
-            domeBtn.textContent = config.domeMode ? 'Dome ✓' : 'Dome';
+            domeBtn.textContent = config.domeMode ? 'Domo ✓' : 'Domo';
             domeBtn.style.background = config.domeMode 
                 ? 'rgba(255, 120, 50, .5)' 
                 : 'rgba(255, 120, 50, .2)';
@@ -1774,7 +1773,7 @@
         micBtn.addEventListener('click', async (e) => {
             e.stopPropagation();
             micOn = !micOn;
-            micBtn.textContent = micOn ? 'Mic ✓' : 'Mic';
+            micBtn.textContent = micOn ? 'Micro ✓' : 'Micro';
             if (micOn && fileInput) fileInput.value = '';
             await enableMic(micOn);
         });
@@ -1783,7 +1782,7 @@
             e.stopPropagation();
             const f = e.target.files && e.target.files[0];
             if (f) {
-                micOn = false; micBtn.textContent = 'Mic';
+                micOn = false; micBtn.textContent = 'Micro';
                 await enableMic(false);
                 await playFile(f);
             }

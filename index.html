@@ -368,6 +368,11 @@
             font-size: 13px;
             color: rgba(255,255,255,.6);
         }
+
+        /* Panel de Tema visual / Densidad oculto en el deploy */
+        #theme-selector {
+            display: none !important;
+        }
     </style>
 </head>
 
@@ -411,18 +416,18 @@
       <div style="display:grid; grid-template-columns:auto 60px 60px; gap:6px 8px; align-items:center;">
         <div></div><div>Umbral</div><div>Delta</div>
         <label>Graves</label>
-        <input id="thL" type="range" min="0" max="1" step="0.01" value="0.12">
-        <input id="dlL" type="range" min="0" max="0.2" step="0.005" value="0.03">
+        <input id="thL" type="range" min="0" max="1" step="0.01" value="0.09">
+        <input id="dlL" type="range" min="0" max="0.2" step="0.005" value="0.02">
         <label>Medios</label>
-        <input id="thM" type="range" min="0" max="1" step="0.01" value="0.10">
-        <input id="dlM" type="range" min="0" max="0.2" step="0.005" value="0.03">
+        <input id="thM" type="range" min="0" max="1" step="0.01" value="0.07">
+        <input id="dlM" type="range" min="0" max="0.2" step="0.005" value="0.02">
         <label>Agudos</label>
-        <input id="thH" type="range" min="0" max="1" step="0.01" value="0.08">
-        <input id="dlH" type="range" min="0" max="0.2" step="0.005" value="0.03">
+        <input id="thH" type="range" min="0" max="1" step="0.01" value="0.06">
+        <input id="dlH" type="range" min="0" max="0.2" step="0.005" value="0.02">
       </div>
       <div style="margin-top:8px; display:flex; gap:8px; align-items:center;">
         <label for="cooldown" style="min-width:70px;">Espera</label>
-        <input id="cooldown" type="range" min="0.02" max="0.3" step="0.01" value="0.08" style="flex:1;">
+        <input id="cooldown" type="range" min="0.02" max="0.3" step="0.01" value="0.04" style="flex:1;">
       </div>
       <div style="margin-top:6px; display:flex; gap:10px; align-items:center; justify-content:space-between;">
         <label style="display:flex; align-items:center; gap:6px;"><input id="audioOnly" type="checkbox" checked> Solo audio</label>
@@ -1825,9 +1830,9 @@
           els[k].addEventListener('change', applyFromUI);
         });
         els.reset.addEventListener('click', () => {
-          els.thL.value = 0.12; els.thM.value = 0.10; els.thH.value = 0.08;
-          els.dlL.value = 0.03; els.dlM.value = 0.03; els.dlH.value = 0.03;
-          els.cooldown.value = 0.08; els.audioOnly.checked = true;
+          els.thL.value = 0.09; els.thM.value = 0.07; els.thH.value = 0.06;
+          els.dlL.value = 0.02; els.dlM.value = 0.02; els.dlH.value = 0.02;
+          els.cooldown.value = 0.04; els.audioOnly.checked = true;
           applyFromUI();
         });
         applyFromUI();

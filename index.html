@@ -1702,6 +1702,11 @@
             config.paused = !config.paused;
             pausePlayBtn.textContent = config.paused ? 'Reproducir' : 'Pausa';
             controls.autoRotate = !config.paused;
+            // Pausa/reanuda también el audio (track por defecto o archivo cargado)
+            if (mediaElem) {
+                if (config.paused) mediaElem.pause();
+                else mediaElem.play().catch(() => {});
+            }
         });
 
         resetCameraBtn.addEventListener('click', (e) => {
@@ -1855,7 +1860,7 @@
             const hitL = (aL > thL && dL > dlL);
             const hitM = (aM > thM && dM > dlM);
             const hitH = (aH > thH && dH > dlH);
-            if (nowT - __lastPulseT > __pulseInterval && (hitL || hitM || hitH)) {
+            if (!config.paused && nowT - __lastPulseT > __pulseInterval && (hitL || hitM || hitH)) {
                 let x = window.innerWidth * 0.5;
                 let y = window.innerHeight * 0.5;
                 if (hitL) {

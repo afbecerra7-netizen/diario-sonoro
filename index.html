@@ -215,10 +215,16 @@
             transform: translateY(8px);
             transition: opacity .25s ease, transform .25s ease;
         }
-        body.fs.show-ui .ui-panel, body.fs.show-ui #control-buttons {
+        /* En pantalla completa los botones de control quedan ocultos (no reaparecen
+           al mover el mouse). Salir con ESC o la tecla F. El panel de sensibilidad
+           sí reaparece al mover el mouse. */
+        body.fs.show-ui .ui-panel {
             opacity: 1;
             pointer-events: auto;
             transform: none;
+        }
+        body.fs #control-buttons {
+            display: none;
         }
 
 

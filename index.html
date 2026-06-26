@@ -513,33 +513,57 @@
                 }
             } catch (e) { console.error(e); alert('No se pudo acceder al micrófono. Usa HTTPS o localhost.'); }
         }
-        // createMediaElementSource may run only once per element — build the node once, then reuse it.
+        // Salida compartida del analizador → destination (una sola conexión).
+        let analyserOut = false;
+        function connectAnalyserOut() {
+            if (!analyserOut) { analyser.connect(audioCtx.destination); analyserOut = true; }
+        }
+
+        // === Pista del Diario Sonoro ===
+        // Se descarga y decodifica UNA sola vez y se reproduce con AudioBufferSourceNode:
+        // loop sin cortes y en el hilo de audio, inmune al jank del render. Evita el
+        // tartamudeo/glitch del <audio> ruteado por Web Audio (síntoma: audio cortado en bucle).
+        const TRACK_URL = 'a.mp3';
+        let trackSource = null, trackBuffer = null;
+        async function playTrack() {
+            try {
+                await ensureAudio();
+                if (audioCtx.state === 'suspended') await audioCtx.resume();
+                if (!trackBuffer) {
+                    const resp = await fetch(TRACK_URL);
+                    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+                    trackBuffer = await audioCtx.decodeAudioData(await resp.arrayBuffer());
+                }
+                if (trackSource) { try { trackSource.stop(); } catch (e) {} }
+                trackSource = audioCtx.createBufferSource();
+                trackSource.buffer = trackBuffer;
+                trackSource.loop = true;
+                trackSource.connect(analyser);
+                connectAnalyserOut();
+                trackSource.start(0);
+            } catch (e) { console.error(e); alert('No se pudo reproducir el audio del Diario Sonoro.'); }
+        }
+
+        // === Archivo cargado por el usuario (vía <audio> + MediaElementSource) ===
         let mediaSrcNode = null;
         function connectMediaElem() {
             if (!mediaElem) { mediaElem = new Audio(); mediaElem.loop = true; mediaElem.crossOrigin = 'anonymous'; }
             if (!mediaSrcNode) {
                 mediaSrcNode = audioCtx.createMediaElementSource(mediaElem);
                 mediaSrcNode.connect(analyser);
-                analyser.connect(audioCtx.destination);
             }
-        }
-        async function playSource(srcUrl) {
-            await ensureAudio();
-            if (audioCtx.state === 'suspended') await audioCtx.resume();
-            connectMediaElem();
-            mediaElem.src = srcUrl;
-            await mediaElem.play();
-        }
-        // Bundled track for the Diario Sonoro deploy
-        const TRACK_URL = 'a.mp3';
-        async function playTrack() {
-            try { await playSource(TRACK_URL); }
-            catch (e) { console.error(e); alert('No se pudo reproducir el audio del Diario Sonoro.'); }
+            connectAnalyserOut();
         }
         async function playFile(file) {
             try {
                 if (!file) return;
-                await playSource(URL.createObjectURL(file));
+                await ensureAudio();
+                if (audioCtx.state === 'suspended') await audioCtx.resume();
+                // Detener la pista por defecto si está sonando.
+                if (trackSource) { try { trackSource.stop(); } catch (e) {} trackSource = null; }
+                connectMediaElem();
+                mediaElem.src = URL.createObjectURL(file);
+                await mediaElem.play();
             } catch (e) { console.error(e); alert('No se pudo reproducir el archivo de audio.'); }
         }
         /* === end audio reactive helpers === */
@@ -1708,10 +1732,11 @@
             config.paused = !config.paused;
             pausePlayBtn.textContent = config.paused ? 'Reproducir' : 'Pausa';
             controls.autoRotate = !config.paused;
-            // Pausa/reanuda también el audio (track por defecto o archivo cargado)
-            if (mediaElem) {
-                if (config.paused) mediaElem.pause();
-                else mediaElem.play().catch(() => {});
+            // Pausa/reanuda el audio congelando el AudioContext (mantiene la posición exacta,
+            // sirve tanto para la pista (AudioBufferSource) como para un archivo cargado).
+            if (audioCtx) {
+                if (config.paused) audioCtx.suspend();
+                else audioCtx.resume();
             }
         });
 
